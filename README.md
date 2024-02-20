@@ -1,2 +1,2 @@
-# AdrianaCOMP-pypipelinep
+# AdrianaPipeline
 # Just starting here
