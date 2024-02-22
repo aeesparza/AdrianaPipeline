@@ -11,3 +11,41 @@ unzip ncbi_dataset.zip
 bowtie2-build ncbi_dataset/data/GCF_000845245.1/GCF_000845245.1_ViralProj14559_genomic.fna HCMVINDEX
 # Now we are ready to map and we can use the following command. Note that the file names will have to be changed accordingly.
 bowtie2 --quiet -x HCMVINDEX -1 SRR5660045_1.fastq -2 SRR5660045_2.fastq -S HCMVmap4.sam
+# To save only the reads that map,
+bowtie2 -x HCMVINDEX -1 SRR5660030_1.fastq -2 SRR5660030
+_2.fastq --al-conc mapped_reads.fastq --un-conc unmapped_reads.fastq > PipelineProject.log
+# To output the number of reads that each dnor had before and after filtering,
+import os
+
+def count_read_pairs(file_path):
+    # Count the number of lines in the file
+    with open(file_path, "r") as file:
+        num_lines = sum(1 for line in file)
+    
+    # Divide by 4 to get the number of read pairs (assuming each read pair has 4 lines)
+    num_read_pairs = num_lines // 4
+    return num_read_pairs
+
+if __name__ == "__main__":
+    # Directory where the input files are located (current directory)
+    data_dir = os.getcwd()
+    
+    # Define file names for mapped and unmapped reads
+    mapped_files = ["mapped_reads.1.fastq", "mapped_reads.2.fastq"]
+    unmapped_files = ["unmapped_reads.1.fastq", "unmapped_reads.2.fastq"]
+    
+    # Define SRR IDs for donors
+    donor_ids = [("1 SRR5660030", "SRR5660033"), ("2 SRR5660044", "SRR5660045")]
+    
+    # Write results to the log file
+    with open("PipelineProject.log", "w") as log_file:
+        for (donor_id_1, donor_id_2), (mapped_file, unmapped_file) in zip(donor_ids, zip(mapped_files, unmapped_files)):
+            # Count read pairs for mapped and unmapped reads
+            mapped_path = os.path.join(data_dir, mapped_file)
+            unmapped_path = os.path.join(data_dir, unmapped_file)
+            num_mapped_read_pairs = count_read_pairs(mapped_path)
+            num_unmapped_read_pairs = count_read_pairs(unmapped_path)
+            
+            # Write results to the log file
+            log_file.write(f"Donor {donor_id_1}/{donor_id_2} had {num_unmapped_read_pairs} read pairs before filtering and {num_mapped_read_pairs} read pairs after.\n")
+
