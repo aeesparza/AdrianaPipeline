@@ -130,4 +130,81 @@ counts = parse_bowtie_output(bowtie_output)
 with open("PipelineProject.log", "w") as log_file:
     log_file.write("Donor 1 (2dpi) had {} read pairs before Bowtie2 filtering and {} read pairs after.".format(counts["paired_reads"], counts["paired_reads"] - counts["unmapped_pairs"]))
 
+# To do part 3, I used the following code. This will provide the command-line that can be used for assembly: spades.py -o assembly_output -s all_mapped_reads.fastq
+
+# Assuming you have the filenames of the mapped reads stored in a list
+mapped_reads_files = ["mapped_reads.1.fastq", "mapped_reads.2.fastq"]
+
+# Concatenate all mapped reads files into a single file
+output_mapped_reads = "all_mapped_reads.fastq"
+with open(output_mapped_reads, "w") as output_file:
+    for mapped_reads_file in mapped_reads_files:
+        with open(mapped_reads_file, "r") as input_file:
+            output_file.write(input_file.read())
+
+# SPAdes command for assembly
+spades_command = f"spades.py -o assembly_output -s {output_mapped_reads}"
+
+# Write the SPAdes command to the log file
+with open("PipelineProject.log", "a") as log_file:
+    log_file.write("SPAdes command used for assembly:\n")
+    log_file.write(spades_command + "\n")
+
+# To do part 4, I used the following code,
+from Bio import SeqIO
+
+# Path to the assembled contigs FASTA file
+assembly_fasta_file = "assembly_output/contigs.fasta"
+
+# Initialize variables to count contigs and total length
+contig_count = 0
+total_length = 0
+
+# Iterate over contigs in the FASTA file
+for record in SeqIO.parse(assembly_fasta_file, "fasta"):
+    # Check if contig length is greater than 1000 base pairs
+    if len(record.seq) > 1000:
+        contig_count += 1
+        total_length += len(record.seq)
+
+# Write the results to the log file
+with open("PipelineProject.log", "a") as log_file:
+    log_file.write("There are {} contigs > 1000 bp in the assembly.\n".format(contig_count))
+    log_file.write("There are {} bp in the assembly.\n".format(total_length))
+
+# To do part 5, I used the following code, 
+from Bio import SeqIO
+from Bio.Blast import NCBIWWW, NCBIXML
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+
+# Step 1: Retrieve the longest contig from SPAdes assembly
+assembly_fasta_file = "assembly_output/contigs.fasta"
+longest_contig_record = max(SeqIO.parse(assembly_fasta_file, "fasta"), key=lambda x: len(x.seq))
+
+# Step 2: Perform BLAST search using the longest contig
+blast_result_file = "blast_output.xml"
+blast_result_handle = NCBIWWW.qblast("blastn", "nr", longest_contig_record.seq)
+
+# Save BLAST result to a file
+with open(blast_result_file, "w") as output:
+    output.write(blast_result_handle.read())
+
+# Step 3: Parse BLAST results and extract top 10 hits
+blast_records = NCBIXML.parse(open(blast_result_file))
+
+# Write header to the log file
+with open("PipelineProject.log", "a") as log_file:
+    log_file.write("sacc\tpident\tlength\tqstart\tqend\tsstart\tsend\tbitscore\tevalue\tstitl\n")
+
+# Iterate over BLAST records and extract top 10 hits
+hit_count = 0
+for blast_record in blast_records:
+    for alignment in blast_record.alignments:
+        for hsp in alignment.hsps:
+            hit_count += 1
+            if hit_count > 10:
+                break
+            with open("PipelineProject.log", "a") as log_file:
+                log_file.write(f"{alignment.accession}\t{hsp.identities / hsp.align_length * 100:.2f}\t{hsp.align_length}\t{hsp.query_start}\t{hsp.query_end}\t{hsp.sbjct_start}\t{hsp.sbjct_end}\t{hsp.bits}\t{hsp.expect}\t{alignment.title}\n")
 
