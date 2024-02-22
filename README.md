@@ -49,3 +49,85 @@ if __name__ == "__main__":
             # Write results to the log file
             log_file.write(f"Donor {donor_id_1}/{donor_id_2} had {num_unmapped_read_pairs} read pairs before filtering and {num_mapped_read_pairs} read pairs after.\n")
 
+# If only testing a sample, I used this slightly long code but it gave more accurate answers,
+import re
+
+def parse_bowtie_output(output):
+    counts = {
+        "total_reads": None,
+        "paired_reads": None,
+        "unmapped_pairs": None,
+        "discordant_pairs": None,
+        "unmapped_mates": None,
+        "mapped_reads_1": None,
+        "mapped_reads_2": None,
+        "unmapped_reads_1": None,
+        "unmapped_reads_2": None
+    }
+
+    # Regular expressions to extract counts
+    total_reads_pattern = re.compile(r"(\d+) reads; of these:")
+    paired_reads_pattern = re.compile(r"(\d+) \((\d+\.\d+)%\) were paired; of these:")
+    unmapped_pairs_pattern = re.compile(r"(\d+) pairs aligned concordantly 0 times")
+    discordant_pairs_pattern = re.compile(r"(\d+) aligned discordantly 1 time")
+    unmapped_mates_pattern = re.compile(r"(\d+) mates make up the pairs; of these:")
+    mapped_reads_pattern = re.compile(r"--al-conc (\S+)")
+    unmapped_reads_pattern = re.compile(r"--un-conc (\S+)")
+
+    # Search for counts and filenames in the output
+    total_reads_match = total_reads_pattern.search(output)
+    paired_reads_match = paired_reads_pattern.search(output)
+    unmapped_pairs_match = unmapped_pairs_pattern.search(output)
+    discordant_pairs_match = discordant_pairs_pattern.search(output)
+    unmapped_mates_match = unmapped_mates_pattern.search(output)
+    mapped_reads_match = mapped_reads_pattern.search(output)
+    unmapped_reads_match = unmapped_reads_pattern.search(output)
+
+    # Populate counts dictionary if matches are found
+    if total_reads_match:
+        counts["total_reads"] = int(total_reads_match.group(1))
+    if paired_reads_match:
+        counts["paired_reads"] = int(paired_reads_match.group(1))
+    if unmapped_pairs_match:
+        counts["unmapped_pairs"] = int(unmapped_pairs_match.group(1))
+    if discordant_pairs_match:
+        counts["discordant_pairs"] = int(discordant_pairs_match.group(1))
+    if unmapped_mates_match:
+        counts["unmapped_mates"] = int(unmapped_mates_match.group(1))
+    if mapped_reads_match:
+        mapped_reads_filename = mapped_reads_match.group(1)
+        counts["mapped_reads_1"] = mapped_reads_filename + ".1.fastq"
+        counts["mapped_reads_2"] = mapped_reads_filename + ".2.fastq"
+    if unmapped_reads_match:
+        unmapped_reads_filename = unmapped_reads_match.group(1)
+        counts["unmapped_reads_1"] = unmapped_reads_filename + ".1.fastq"
+        counts["unmapped_reads_2"] = unmapped_reads_filename + ".2.fastq"
+
+    return counts
+
+# Example output from Bowtie2 command
+bowtie_output = """
+2004530 reads; of these:
+  2004530 (100.00%) were paired; of these:
+    755058 (37.67%) aligned concordantly 0 times
+    1248791 (62.30%) aligned concordantly exactly 1 time
+    681 (0.03%) aligned concordantly >1 times
+    ----
+    755058 pairs aligned concordantly 0 times; of these:
+      139896 (18.53%) aligned discordantly 1 time
+    ----
+    615162 pairs aligned 0 times concordantly or discordantly; of these:
+      1230324 mates make up the pairs; of these:
+        1140126 (92.67%) aligned 0 times
+        89352 (7.26%) aligned exactly 1 time
+        846 (0.07%) aligned >1 times
+71.56% overall alignment rate
+--al-conc mapped_reads.fastq --un-conc unmapped_reads.fastq > PipelineProject.log
+"""
+
+# Parse the output and write counts to PipelineProject.log file
+counts = parse_bowtie_output(bowtie_output)
+with open("PipelineProject.log", "w") as log_file:
+    log_file.write("Donor 1 (2dpi) had {} read pairs before Bowtie2 filtering and {} read pairs after.".format(counts["paired_reads"], counts["paired_reads"] - counts["unmapped_pairs"]))
+
+
