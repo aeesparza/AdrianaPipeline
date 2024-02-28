@@ -25,7 +25,7 @@ makeblastdb -in Hsubfamily.fasta -out betaherpesvirinae -title betaherpesvirinae
 
 # ADRIANA ESPARZA LUC COMPBIO 483 
 # This python wrapper script takes samples of 2 donors and a total of 4 transcriptomes.
-# The command-line used was the following (but may vary based on sample input data): python AE_pywrapper.py HCMVINDEX 30sample_reads.1.fastq 30sample_reads.2.fastq 33sample_reads.1.fastq 33sample_reads.2.fastq 44sample_reads.1.fastq 44sample_reads.2.fastq 45sample_reads.1.fastq 45sample_reads.2.fastq
+# The command-line used was the following (but may vary based on sample input data): python AE_pywrapper.py HCMVINDEX python PANIC.py HCMVINDEX 30sample_reads_1.fastq 30sample_reads_2.fastq 33sample_reads_1.fastq 33sample_reads_2.fastq 44sample_reads_1.fastq 44sample_reads_2.fastq 45sample_reads_1.fastq 45sample_reads_2.fastq
 # The code expects the command-line to provide the script's name, a previously created index (in this case for HCMV NCBI accession NC_006273.2), and 8 paired-end files (based on the 4 transcriptomes split in fastq format. Each is less than 1MB)
 # Error comments and exits were added just to identify issues while building this script
 
