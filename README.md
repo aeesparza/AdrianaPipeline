@@ -29,9 +29,24 @@ makeblastdb -in Hsubfamily.fasta -out betaherpesvirinae -title betaherpesvirinae
 # The code expects the command-line to provide the script's name, a previously created index (in this case for HCMV NCBI accession NC_006273.2), and 8 paired-end files (based on the 4 transcriptomes split in fastq format. Each is less than 1MB)
 # Error comments and exits were added just to identify issues while building this script
 
+# ADRIANA ESPARZA LUC COMPBIO 483 
+# This python wrapper script takes samples of 2 donors and a total of 4 transcriptomes.
+# The command-line used was the following (but may vary based on sample input data): python AE_pywrapperFinal.py HCMVINDEX 30sample_reads_1.fastq 30sample_reads_2.fastq 33sample_reads_1.fastq 33sample_reads_2.fastq 44sample_reads_1.fastq 44sample_reads_2.fastq 45sample_reads_1.fastq 45sample_reads_2.fastq
+# The code expects the command-line to provide the script's name, a previously created index (in this case for HCMV NCBI accession NC_006273.2), and 8 paired-end files (based on the 4 transcriptomes split in fastq format. Each is less than 1MB)
+# Error comments and exits were added just to identify issues while building this script
+
 import sys
 import os
 import subprocess
+
+directory_name = "PipelineProject_Adriana_Esparza"
+
+# To create my directory if it doesn't exist (but should exist already)
+if not os.path.exists(directory_name):
+    os.mkdir(directory_name)
+
+# To move within my directory
+os.chdir(directory_name)
 
 # To solve PART 2, MAPPING TO INDEX WITH BOWTIE2 AND COUNTING BEFORE/AFTER READS
 def count_aligned_reads(sam_file, mapq_threshold=20): # To count the reads in sam files above a mapq score of 20 *for a 99% confidence level
@@ -52,7 +67,7 @@ def run_bowtie2_and_count_reads(read_file_1, read_file_2, index_prefix): # To ca
 
     sam_output = f"{os.path.splitext(read_file_1)[0]}_bowtie2.sam" # To create a command to align the reads to the index. It then saves the outputs in .sam files
     unaligned_output_base = os.path.splitext(read_file_1)[0] + "_unaligned" # To separate the unaligned reads in a different file
-    
+
     # To run Bowtie2
     bowtie2_cmd = [
         "bowtie2",
@@ -93,10 +108,67 @@ def write_to_log(filename, read_pairs_before, read_pairs_after): # Later, the ou
         for key in sorted(read_pairs_before.keys()):
             log_file.write(f"{key} had {read_pairs_before[key]} read pairs before Bowtie2 filtering and {read_pairs_after[key]} read pairs after.\n")
 
-# To solve PART 3, ASSEMBLING THE 4 TRANSCRIPTOMES AND WRITING THE COMMAND-LINE USED *Rest of the functions later in the code
-def write_spades_command_to_log(filename, spades_cmd): # Writes the command-line used to run the assembly by SPAdes
-    with open(filename, "a") as log_file:
-        log_file.write("SPAdes command: " + " ".join(spades_cmd) + "\n")
+# To convert the produced .sam files to .bam and then to .fastq
+def sam_to_fastq(sam_file, fastq_file):
+    try:
+        with open(sam_file, "r") as sam, open(fastq_file, "w") as fastq:
+            for line in sam:
+                if line.startswith("@"):
+                    continue  # Will skip the header lines
+                fields = line.split("\t")
+                read_id = fields[0]
+                sequence = fields[9]
+                quality = fields[10]
+                fastq.write(f"@{read_id}\n{sequence}\n+\n{quality}\n")
+    except Exception as e:
+        print(f"Error converting {sam_file} to FASTQ: {e}")
+        return False
+    return True
+
+def convert_sam_files_to_fastq(sam_files):
+    for sam_file in sam_files:
+        fastq_file = os.path.splitext(sam_file)[0] + '.fastq'
+        if not sam_to_fastq(sam_file, fastq_file):
+            print(f"Conversion failed for {sam_file}.")
+            return False
+        print(f"Conversion successful. FASTQ file saved as {fastq_file}")
+    return True
+
+sam_files = ['30sample_reads_1_bowtie2.sam', '33sample_reads_1_bowtie2.sam', '44sample_reads_1_bowtie2.sam', '45sample_reads_1_bowtie2.sam']
+convert_sam_files_to_fastq(sam_files)
+
+# To solve PART 3, ASSEMBLING THE 4 TRANSCRIPTOMES AND WRITING THE COMMAND-LINE USED 
+
+
+# Added this so SPAdes knows we're still in our directory and that it can create the assembly files here
+current_directory = os.path.dirname(__file__)
+
+# To change the current working directory to the directory of the script
+os.chdir(current_directory)
+
+# To define the output directory for SPAdes'assembly
+spades_output_dir = os.path.join(current_directory, "ASSEMBLY")
+
+# The SPAdes command based on our class PowerPoint *could also be run in the terminal if desired
+spades_cmd = f"spades.py -o ASSEMBLY --s1 30sample_reads_1_bowtie2.fastq --s2 33sample_reads_1_bowtie2.fastq --s3 44sample_reads_1_bowtie2.fastq --s4 45sample_reads_1_bowtie2.fastq"
+
+try:
+    subprocess.run(spades_cmd, shell=True, check=True)
+    print("SPAdes assembly completed successfully.")
+except subprocess.CalledProcessError as e:
+    print(f"Error running SPAdes: {e}")
+
+def write_spades_command_to_log(command, log_file):
+    with open(log_file, "a") as log:  # Will open the log file in append mode
+        log.write("SPAdes command:\n")
+        log.write(command + "\n")
+
+# To define the SPAdes command
+spades_cmd = "spades.py -o ASSEMBLY --s1 30sample_reads_1_bowtie2.fastq --s2 33sample_reads_1_bowtie2.fastq --s3 44sample_reads_1_bowtie2.fastq --s4 45sample_reads_1_bowtie2.fastq"
+
+# To write the command to the log file
+write_spades_command_to_log(spades_cmd, "PipelineProject.log")
+
 
 # To solve PART 4, CALCULATING NUMBER OF CONTIGS
 def calculate_contig_stats(assembly_file): # To calculate the number of contigs that are longer than 1000 base pairs and the total of base pairs contained within the contigs from the assembly file
@@ -174,6 +246,7 @@ def perform_blast():
         print(f"Error running Blast+: {e}")
         return
 
+# The precious Main Function 
 if __name__ == "__main__":
     if len(sys.argv) < 10:
         print("Usage: python script.py <index> <read1_1> <read1_2> <read2_1> <read2_2> <read3_1> <read3_2> <read4_1> <read4_2>") # The command-line expected to run this python wrapper
@@ -184,25 +257,21 @@ if __name__ == "__main__":
     
     read_pairs_before, read_pairs_after = process_paired_end_reads(read_files, index_prefix) # To process the read files with the actual Bowtie2 filtering
     
-    log_filename = "PipelineProject.log"
+    log_filename = "PipelineProject.log" # The .log file that will contain all of the answers
     
-    write_to_log(log_filename, read_pairs_before, read_pairs_after)
-   # The SPAdes assembly of PART 3  
-    spades_output_dir = "ASSEMBLY" # To write the SPAdes command to the log file *pe1/2/3.. are just regular uses for a SPAdes command
-    spades_cmd = [
-        "spades.py",
-        "-o", spades_output_dir,
-        "--pe1-1", read_files[0],
-        "--pe1-2", read_files[1],
-        "--pe2-1", read_files[2],
-        "--pe2-2", read_files[3],
-        "--pe3-1", read_files[4],
-        "--pe3-2", read_files[5],
-        "--pe4-1", read_files[6],
-        "--pe4-2", read_files[7]
-    ]
-    write_spades_command_to_log(log_filename, spades_cmd) # To write the SPAdes command used as instructed
-    
+    write_to_log(log_filename, read_pairs_before, read_pairs_after) # For the Bowtie2 part
+
+    spades_output_dir = "ASSEMBLY" # For the SPAdes part
+
+    spades_cmd = f"spades.py -o {spades_output_dir} --s1 30sample_reads_1_bowtie2.fastq --s2 33sample_reads_1_bowtie2.fastq --s3 44sample_reads_1_bowtie2.fastq --s4 45sample_reads_1_bowtie2.fastq"
+
+    write_spades_command_to_log(spades_cmd, log_filename) 
+
+    try:
+        subprocess.run(spades_cmd, shell=True, check=True)
+        print("SPAdes assembly completed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error running SPAdes: {e}")
     num_contigs_over_1000bp, total_bp_over_1000bp = calculate_contig_stats(os.path.join(spades_output_dir, "contigs.fasta")) # To calculate the contigs
     
     with open(log_filename, "a") as log_file: # To write the contig statistics to the log file
@@ -221,7 +290,19 @@ if __name__ == "__main__":
     print(f"Longest contig saved in {longest_contig_file}.")
     print(f"Pipeline complete! See {log_filename}.")
 
-# Done! This ran in less than 2 minutes with all files present in my working directory.
+# Done! This code was tested many times with the files provided in this repo. Run time is ~ 2 ish minutes.
+# Answers in PipelineProject.log file should look something like this,
+# Donor 1 had 40000 read pairs before Bowtie2 filtering and 27103 read pairs after.
+# Donor 2 had 40000 read pairs before Bowtie2 filtering and 23569 read pairs after.
+# SPAdes command:
+# spades.py -o ASSEMBLY --s1 30sample_reads_1_bowtie2.fastq --s2 33sample_reads_1_bowtie2.fastq --s3 44sample_reads_1_bowtie2.fastq --s4 45sample_reads_1_bowtie2.fastq
+# There are 44 contigs > 1000 bp in the assembly.
+# There are 194635 bp in the assembly.
+# sacc	pident	length	qstart	qend	sstart	send	bitscore	evalue	stitle
+# NC_006273.2	99.621	7924	9944	17865	36133	28214	14462	0.0	NC_006273.2 Human herpesvirus 5 strain Merlin, complete genome
+# NC_003521.1	79.863	1465	11150	12594	32592	31148	1035	0.0	NC_003521.1 Panine herpesvirus 2 strain Heberling, complete genome
+
+
 
 
 
