@@ -1,0 +1,16 @@
+- "number": !!int "1"
+  "single reads":
+  - "/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/corrected/30sample_reads_1_bowtie2.00.0_0.cor.fastq.gz"
+  "type": "single"
+- "number": !!int "2"
+  "single reads":
+  - "/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/corrected/33sample_reads_1_bowtie2.00.1_0.cor.fastq.gz"
+  "type": "single"
+- "number": !!int "3"
+  "single reads":
+  - "/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/corrected/44sample_reads_1_bowtie2.00.2_0.cor.fastq.gz"
+  "type": "single"
+- "number": !!int "4"
+  "single reads":
+  - "/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/corrected/45sample_reads_1_bowtie2.00.3_0.cor.fastq.gz"
+  "type": "single"
