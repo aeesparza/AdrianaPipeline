@@ -1,11 +1,11 @@
-Command line: /usr/local/bin/spades.py	-o	/home/aesparza2/adridirectory/AdriPipeline/PipelineProject_Adriana_Esparza/PANIC/ASSEMBLY	--s1	/home/aesparza2/adridirectory/AdriPipeline/PipelineProject_Adriana_Esparza/PANIC/30sample_reads_1_bowtie2.fastq	--s2	/home/aesparza2/adridirectory/AdriPipeline/PipelineProject_Adriana_Esparza/PANIC/33sample_reads_1_bowtie2.fastq	--s3	/home/aesparza2/adridirectory/AdriPipeline/PipelineProject_Adriana_Esparza/PANIC/44sample_reads_1_bowtie2.fastq	--s4	/home/aesparza2/adridirectory/AdriPipeline/PipelineProject_Adriana_Esparza/PANIC/45sample_reads_1_bowtie2.fastq	
+Command line: /usr/local/bin/spades.py	-o	/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY	--s1	/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/30sample_reads_1_bowtie2.fastq	--s2	/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/33sample_reads_1_bowtie2.fastq	--s3	/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/44sample_reads_1_bowtie2.fastq	--s4	/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/45sample_reads_1_bowtie2.fastq	
 
 System information:
   SPAdes version: 3.15.5
   Python version: 3.10.12
   OS: Linux-5.15.0-91-generic-x86_64-with-glibc2.35
 
-Output dir: /home/aesparza2/adridirectory/AdriPipeline/PipelineProject_Adriana_Esparza/PANIC/ASSEMBLY
+Output dir: /home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY
 Mode: read error correction and assembling
 Debug mode is turned OFF
 
@@ -17,25 +17,25 @@ Dataset parameters:
       left reads: not specified
       right reads: not specified
       interlaced reads: not specified
-      single reads: ['/home/aesparza2/adridirectory/AdriPipeline/PipelineProject_Adriana_Esparza/PANIC/30sample_reads_1_bowtie2.fastq']
+      single reads: ['/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/30sample_reads_1_bowtie2.fastq']
       merged reads: not specified
     Library number: 2, library type: single
       left reads: not specified
       right reads: not specified
       interlaced reads: not specified
-      single reads: ['/home/aesparza2/adridirectory/AdriPipeline/PipelineProject_Adriana_Esparza/PANIC/33sample_reads_1_bowtie2.fastq']
+      single reads: ['/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/33sample_reads_1_bowtie2.fastq']
       merged reads: not specified
     Library number: 3, library type: single
       left reads: not specified
       right reads: not specified
       interlaced reads: not specified
-      single reads: ['/home/aesparza2/adridirectory/AdriPipeline/PipelineProject_Adriana_Esparza/PANIC/44sample_reads_1_bowtie2.fastq']
+      single reads: ['/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/44sample_reads_1_bowtie2.fastq']
       merged reads: not specified
     Library number: 4, library type: single
       left reads: not specified
       right reads: not specified
       interlaced reads: not specified
-      single reads: ['/home/aesparza2/adridirectory/AdriPipeline/PipelineProject_Adriana_Esparza/PANIC/45sample_reads_1_bowtie2.fastq']
+      single reads: ['/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/45sample_reads_1_bowtie2.fastq']
       merged reads: not specified
 Read error correction parameters:
   Iterations: 1
@@ -48,7 +48,7 @@ Assembly parameters:
   MismatchCorrector will be SKIPPED
   Coverage cutoff is turned OFF
 Other parameters:
-  Dir for temp files: /home/aesparza2/adridirectory/AdriPipeline/PipelineProject_Adriana_Esparza/PANIC/ASSEMBLY/tmp
+  Dir for temp files: /home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/tmp
   Threads: 16
   Memory limit (in Gb): 250
 

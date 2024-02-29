@@ -1,0 +1,16 @@
+- "number": !!int "1"
+  "single reads":
+  - "/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/30sample_reads_1_bowtie2.fastq"
+  "type": "single"
+- "number": !!int "2"
+  "single reads":
+  - "/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/33sample_reads_1_bowtie2.fastq"
+  "type": "single"
+- "number": !!int "3"
+  "single reads":
+  - "/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/44sample_reads_1_bowtie2.fastq"
+  "type": "single"
+- "number": !!int "4"
+  "single reads":
+  - "/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/45sample_reads_1_bowtie2.fastq"
+  "type": "single"
