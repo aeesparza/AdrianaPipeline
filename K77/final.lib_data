@@ -1,0 +1,111 @@
+ê&---
+max read length: 151
+nomerge max read length: 151
+average read length: 149.041
+average coverage: 20.8226
+libraries:
+  - type:            single
+    number:          1
+    single reads:
+      - '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/corrected/30sample_reads_1_bowtie2.00.0_0.cor.fastq.gz'
+    data:
+      unmerged read length: 151
+      merged read length: 0
+      insert size mean: 0
+      insert size deviation: 0
+      insert size left quantile: 0
+      insert size right quantile: 0
+      insert size median: 0
+      insert size mad: 0
+      insert size distribution: {  }
+      pi threshold:    0
+      binary reads info:
+        binary converted: true
+        bin reads info file: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/INFO_0'
+        paired read prefix: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/paired_0'
+        merged read prefix: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/merged_0'
+        single read prefix: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/single_0'
+        chunk num:       16
+      single reads mapped: true
+      library index:   0
+      number of reads: 19886
+      total nucleotides: 2994203
+  - type:            single
+    number:          2
+    single reads:
+      - '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/corrected/33sample_reads_1_bowtie2.00.1_0.cor.fastq.gz'
+    data:
+      unmerged read length: 151
+      merged read length: 0
+      insert size mean: 0
+      insert size deviation: 0
+      insert size left quantile: 0
+      insert size right quantile: 0
+      insert size median: 0
+      insert size mad: 0
+      insert size distribution: {  }
+      pi threshold:    0
+      binary reads info:
+        binary converted: true
+        bin reads info file: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/INFO_1'
+        paired read prefix: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/paired_1'
+        merged read prefix: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/merged_1'
+        single read prefix: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/single_1'
+        chunk num:       16
+      single reads mapped: true
+      library index:   1
+      number of reads: 19871
+      total nucleotides: 2991893
+  - type:            single
+    number:          3
+    single reads:
+      - '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/corrected/44sample_reads_1_bowtie2.00.2_0.cor.fastq.gz'
+    data:
+      unmerged read length: 151
+      merged read length: 0
+      insert size mean: 0
+      insert size deviation: 0
+      insert size left quantile: 0
+      insert size right quantile: 0
+      insert size median: 0
+      insert size mad: 0
+      insert size distribution: {  }
+      pi threshold:    0
+      binary reads info:
+        binary converted: true
+        bin reads info file: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/INFO_2'
+        paired read prefix: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/paired_2'
+        merged read prefix: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/merged_2'
+        single read prefix: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/single_2'
+        chunk num:       16
+      single reads mapped: true
+      library index:   2
+      number of reads: 19885
+      total nucleotides: 2941755
+  - type:            single
+    number:          4
+    single reads:
+      - '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/corrected/45sample_reads_1_bowtie2.00.3_0.cor.fastq.gz'
+    data:
+      unmerged read length: 151
+      merged read length: 0
+      insert size mean: 0
+      insert size deviation: 0
+      insert size left quantile: 0
+      insert size right quantile: 0
+      insert size median: 0
+      insert size mad: 0
+      insert size distribution: {  }
+      pi threshold:    0
+      binary reads info:
+        binary converted: true
+        bin reads info file: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/INFO_3'
+        paired read prefix: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/paired_3'
+        merged read prefix: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/merged_3'
+        single read prefix: '/home/aesparza2/adridirectory/AdriPipeline/AdrianaPipeline/ASSEMBLY/.bin_reads/single_3'
+        chunk num:       16
+      single reads mapped: true
+      library index:   3
+      number of reads: 19855
+      total nucleotides: 2920464
+...
