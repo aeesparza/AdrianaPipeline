@@ -2,6 +2,8 @@
 # This repo will be designated to my LUC COMP BIO python pipeline project- Track 2 Genome Assembly (SPRING 2024)
 # Dependencies include, Python and standard libraries like sys, os, and subprocess, Bowtie2, SPAdes, and BLAST+.
 # Files needed in the same directory or environment (all attached to this repo and less than 1MB each): Samples of the donors pre-prepped and paired-end.fastq -8 in total, multiple files that compose the index of the NC_006273.2 entry, multiple files that compose the local database of the HCMV subfamily. The python wrapper was also attached as a .py file to download if desired but written below as part of the pipeline.
+# I have added a README file to this repo and used it to push my edits and all files from the class server to GitHub. To access it, the following command can be used in the terminal: 
+git clone
 
 # Background: For this project, we want to compare HCMV transcriptomes from 2 donors 2- and 6- days post-infection. 4 transcriptomes in total.
 
